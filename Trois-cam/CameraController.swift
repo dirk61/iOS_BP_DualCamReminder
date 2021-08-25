@@ -85,7 +85,7 @@ class CameraController:NSObject, AVCaptureFileOutputRecordingDelegate, AVCapture
             
             if self.movieFileOutput?.isRecording == false{
                 let lowerbound = String.Index(encodedOffset: 1)
-                let outputFileName = ExperimentStr[lowerbound...] +  "_Front"
+                let outputFileName = "_Front"
                 //                let outputFilePath = (NSTemporaryDirectory() as NSString).appendingPathComponent((outputFileName as NSString).appendingPathExtension("mov")!)
                 
                 let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -124,7 +124,7 @@ class CameraController:NSObject, AVCaptureFileOutputRecordingDelegate, AVCapture
             
             if self.movieFileOutput2?.isRecording == false{
                 let lowerbound = String.Index(encodedOffset: 1)
-                let outputFileName = ExperimentStr[lowerbound...] + "_finger"
+                let outputFileName = "_finger"
                 //                let outputFilePath = (NSTemporaryDirectory() as NSString).appendingPathComponent((outputFileName as NSString).appendingPathExtension("mov")!)
                 
                 let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)

@@ -123,8 +123,7 @@ struct MultiView: View{
                 
                 stopDataCollection()
                 self.timeRemaining -= 1
-                usleep(3000000)
-
+            
                 start = false
                 self.timeRemaining = RTime
                 toggleTorch(on: false)
@@ -240,86 +239,6 @@ func autoISOBack()
     }
     
 }
-func urlConnection(u: String)
-{
-    let lowerBounds = String.Index(encodedOffset: 1)
-    if (u == "http://192.168.1." + subNet + ":5000/upload"){
-        var ex:String = String(ExperimentStr[lowerBounds...])
-        let params = ["timestamp": String(Int(Date().timeIntervalSince1970 * 1000)), "nameagegender":"Yuki", "experiment": ex]
-        print("upload:\(String(Int(Date().timeIntervalSince1970 * 1000)))")
-        HTTP.POST(u, parameters: params) { response in
-            
-            //            print(response)
-        }
-        
-    }
-    else if(u == "http://192.168.1." + subNet + ":5000/get")
-    {
-        HTTP.GET(u){
-            response in
-            let responseArr = response.text!.components(separatedBy: "\n")
-            print(responseArr)
-            for row in responseArr{
-                print(row)
-                if row == ""{
-                    print(1)
-                }
-                else{
-                    print(0)
-                    let timestamp = row.components(separatedBy: ",")[0]
-                    let value = row.components(separatedBy: ",")[1]
-                    waveCsvWriter?.writeField(timestamp)
-                    waveCsvWriter?.writeField(value)
-                    
-                    waveCsvWriter?.finishLine()
-                }
-                
-            }
-            do{
-                try waveBuffer.write(to: waveURL)
-            }
-            catch{
-                
-            }
-            
-        }
-        
-    }
-    else{
-        
-        
-        let url = URL(string: u)!
-        
-        var request = URLRequest(url: url)
-        print("start:\(String(Int(Date().timeIntervalSince1970 * 1000)))")
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            if let data = data {
-                
-            } else if let error = error {
-                print("HTTP Request Failed \(error)")
-            }
-        }
-        //
-        task.resume()
-        
-    }
-}
-func collectAmbientLight(){
-    if #available(iOS 14.0, *) {
-        let ambient = SRSensor(rawValue: "ambientLightSensor")
-        SRSensorReader.requestAuthorization(sensors: [.ambientLightSensor]) { error in
-            print(error!)
-        }
-        let reader = SRSensorReader(sensor: ambient)
-        print(reader.authorizationStatus)
-        
-        reader.startRecording()
-        
-    } else {
-        // Fallback on earlier versions
-    }
-    
-}
 
 func collectSensorData(){
     if motion.isAccelerometerAvailable && motion.isGyroAvailable && motion.isMagnetometerAvailable{
@@ -363,28 +282,6 @@ func collectSensorData(){
     }
 }
 
-func enum2String(e: Experiments) -> String{
-    switch e {
-    case Experiments.Natural_Stationary:
-        return "/Natural Stationary"
-    case Experiments.LED_Stationary:
-        return "/Led Stationary"
-    case Experiments.Playground:
-        return "/Playground"
-    case Experiments.Randomly:
-        return "/Randomly"
-    case Experiments.Left_Right:
-        return "/Left Right"
-    case Experiments.Talking:
-        return "/Talking"
-    case Experiments.Running:
-        return "/Running"
-    case Experiments.Incandescent_Stationary:
-        return "/Incandescent Stationary"
-    default:
-        break
-    }
-}
 
 func stopDataCollection() {
     do{
