@@ -8,6 +8,7 @@
 
 import Foundation
 import EventKit
+import UIKit
 class EventController{
     var store = EKEventStore()
     var isAdd:Bool
@@ -34,18 +35,17 @@ class EventController{
         print(self.isAdd)
         if (!self.isAdd)
         {
-            self.addEvent(hour :8)
-            self.addEvent(hour: 12)
-            self.addEvent(hour: 17)
-            self.addEvent(hour: 22)
-            
+            self.addEvent(hour :8, "起床后")
+            self.addEvent(hour: 12, "午饭前")
+            self.addEvent(hour: 17, "晚饭前")
+            self.addEvent(hour: 22, "睡前")
         }
         
         
         
     }
     
-    func addEvent(hour: Int){
+    func addEvent(hour: Int, _ note: String){
         let calendar = store.defaultCalendarForNewReminders()!
         
         
@@ -71,7 +71,7 @@ class EventController{
         newReminder.addAlarm(EKAlarm(relativeOffset: TimeInterval(0)))
         
         newReminder.priority = Int(EKReminderPriority.high.rawValue)
-        newReminder.notes = "请开始血压测量，并且打开app进行视频录制"
+        newReminder.notes = note
         
         try! store.save(newReminder, commit: true)
     }

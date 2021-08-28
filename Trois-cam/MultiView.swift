@@ -59,6 +59,8 @@ var waveOutput = OutputStream.toMemory()
 var waveCsvWriter = CHCSVWriter(outputStream: waveOutput, encoding: String.Encoding.utf8.rawValue, delimiter: ",".utf16.first!)
 var waveBuffer = (waveOutput.property(forKey: .dataWrittenToMemoryStreamKey) as? Data)!
 
+var dateStr = ""
+
 var frontdispatch: DispatchQueue = DispatchQueue(label: "Front")
 var backdispatch: DispatchQueue = DispatchQueue(label: "Back")
 
@@ -66,10 +68,12 @@ struct MultiView: View{
     @State private var timeRemaining = RTime
     @State private var start = false
     @State private var selectedMode = "Auto"
+    @State private var showingAlert = true
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     let cameraSource = CameraController()
     let eventSource = EventController()
+    
     
     @State var selectedIndex:Int? = nil
     
@@ -87,14 +91,16 @@ struct MultiView: View{
                     
                 }
                 
-            }
+            }.alert(isPresented: $showingAlert, content: {
+                Alert(title: Text("注意事项"), message: Text("请先测量三次血压"), dismissButton:.cancel())
+            })
             
-            Button(action: {toggleTorch(on: true);},label:{Text("打开闪光灯")}).padding()
+            Button(action: {toggleTorch(on: true)},label:{Text("打开闪光灯")}).padding()
             Text("剩余时间:\(timeRemaining)").padding()
 //            Button(action: {manualISO();manualISOBack();selectedMode="Manual"},label:{Text("manual")})
 //            Button(action: {autoISO();selectedMode = "Auto"},label:{Text("auto")})
             
-            Button(action:{start = true;toggleTorch(on: true) ;manualISOBack();manualISO();frontURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(ID + ExperimentStr + frontName);fingerURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(ID + ExperimentStr+fingerName);accURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(ID + ExperimentStr + accName);gyroURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(ID + ExperimentStr + gyroName);magneURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(ID + ExperimentStr + magneName);waveURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(ID + ExperimentStr + waveName);audioURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(ID + ExperimentStr + audioName);depthURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(ID + ExperimentStr + depthName);cameraSource.prepareDepth();
+            Button(action:{start = true;dateStr = date2Str();mkdirectory(dateStr);toggleTorch(on: true) ;manualISOBack();manualISO();frontURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + frontName);fingerURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr+fingerName);accURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + accName);gyroURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + gyroName);magneURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + magneName);waveURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + waveName);audioURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + audioName);depthURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + depthName);cameraSource.prepareDepth();
                     frontdispatch.async {
                         cameraSource.startRecord();
                     }; backdispatch.async {
@@ -137,6 +143,13 @@ struct MultiView_Previews: PreviewProvider {
     static var previews: some View {
         MainView()
     }
+}
+
+func date2Str() -> String{
+    let formatter3 = DateFormatter()
+    formatter3.dateFormat = "y_MM_d_HH_mm_ss"
+    print(formatter3.string(from: Date()))
+    return formatter3.string(from: Date())
 }
 
 func toggleTorch(on: Bool) {
@@ -198,6 +211,20 @@ func autoISO()
         print("Torch could not be used")
     }
     
+}
+
+func mkdirectory(_ back:String){
+    let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+    let documentsDirectory = paths[0]
+    let docURL = URL(string: documentsDirectory)!
+    let dataPath = docURL.appendingPathComponent(back)
+    if !FileManager.default.fileExists(atPath: dataPath.path) {
+        do {
+            try FileManager.default.createDirectory(atPath: dataPath.path, withIntermediateDirectories: true, attributes: nil)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
 }
 func manualISOBack()
 {

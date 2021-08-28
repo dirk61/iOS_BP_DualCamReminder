@@ -46,7 +46,8 @@ class DepthCapture {
         // Create the output zip file, remove old one if exists
         let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
 //        self.outputURL = URL(fileURLWithPath: documentsPath.appendingPathComponent(ID2 + "/Depth" + ExperimentStr + "_Depth"))
-        self.outputURL = URL(fileURLWithPath: documentsPath.appendingPathComponent("/Depth"))
+//        self.outputURL = URL(fileURLWithPath: documentsPath.appendingPathComponent("/Depth"))
+        self.outputURL = depthURL
         FileManager.default.createFile(atPath: self.outputURL!.path, contents: nil, attributes: nil)
         self.file = FileHandle(forUpdatingAtPath: self.outputURL!.path)
         if self.file == nil {
