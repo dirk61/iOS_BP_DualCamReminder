@@ -31,6 +31,7 @@ let frontName = "/Front.mov"
 let fingerName = "/PPG.mov"
 let audioName = "/Audio.m4a"
 let depthName = "/Depth"
+let BPName = "/BP.txt"
 
 let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
 
@@ -42,6 +43,7 @@ var frontURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponen
 var fingerURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(ID + fingerName)
 var audioURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(ID + audioName)
 var depthURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(ID + depthName)
+var BPURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(ID + BPName)
 
 var accOutput = OutputStream.toMemory()
 var accCsvWriter = CHCSVWriter(outputStream: accOutput, encoding: String.Encoding.utf8.rawValue, delimiter: ",".utf16.first!)
@@ -58,6 +60,8 @@ var magneBuffer = (magneOutput.property(forKey: .dataWrittenToMemoryStreamKey) a
 var waveOutput = OutputStream.toMemory()
 var waveCsvWriter = CHCSVWriter(outputStream: waveOutput, encoding: String.Encoding.utf8.rawValue, delimiter: ",".utf16.first!)
 var waveBuffer = (waveOutput.property(forKey: .dataWrittenToMemoryStreamKey) as? Data)!
+
+
 
 var dateStr = ""
 
@@ -100,7 +104,7 @@ struct MultiView: View{
 //            Button(action: {manualISO();manualISOBack();selectedMode="Manual"},label:{Text("manual")})
 //            Button(action: {autoISO();selectedMode = "Auto"},label:{Text("auto")})
             
-            Button(action:{start = true;dateStr = date2Str();mkdirectory(dateStr);toggleTorch(on: true) ;manualISOBack();manualISO();frontURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + frontName);fingerURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr+fingerName);accURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + accName);gyroURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + gyroName);magneURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + magneName);waveURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + waveName);audioURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + audioName);depthURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + depthName);cameraSource.prepareDepth();
+            Button(action:{start = true;print(SBP_1, SBP_2, SBP_3);dateStr = date2Str();mkdirectory(dateStr);toggleTorch(on: true) ;manualISOBack();manualISO();BPURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + BPName);recordBP();frontURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + frontName);fingerURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr+fingerName);accURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + accName);gyroURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + gyroName);magneURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + magneName);waveURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + waveName);audioURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + audioName);depthURL = URL(fileURLWithPath: documentDirectoryPath).appendingPathComponent(dateStr + depthName);cameraSource.prepareDepth();
                     frontdispatch.async {
                         cameraSource.startRecord();
                     }; backdispatch.async {
@@ -327,3 +331,36 @@ func stopDataCollection() {
     motion.stopAccelerometerUpdates()
 }
 
+func recordBP(){
+//    var BPOutput = OutputStream.toMemory()
+//    var BPCsvWriter = CHCSVWriter(outputStream: BPOutput, encoding: String.Encoding.utf8.rawValue, delimiter: ",".utf16.first!)
+//    var BPBuffer = (BPOutput.property(forKey: .dataWrittenToMemoryStreamKey) as? Data)!
+//
+//    BPCsvWriter?.writeField(SBP_1)
+//    BPCsvWriter?.writeField(DBP_1)
+//    BPCsvWriter?.writeField(HR_1)
+//    BPCsvWriter?.finishLine()
+//    BPCsvWriter?.writeField(SBP_2)
+//    BPCsvWriter?.writeField(DBP_2)
+//    BPCsvWriter?.writeField(HR_2)
+//    BPCsvWriter?.finishLine()
+//    BPCsvWriter?.writeField(SBP_3)
+//    BPCsvWriter?.writeField(DBP_3)
+//    BPCsvWriter?.writeField(HR_3)
+//    BPCsvWriter?.finishLine()
+//    do{
+//
+//        try BPBuffer.write(to: BPURL)
+////        BPBuffer.removeAll()
+//
+//    }
+//    catch{
+//
+//    }
+    var BPStr = SBP_1 + " " + DBP_1 + " " + HR_1 + " " + SBP_2 + " " + DBP_2 + " " + HR_2 + " " + SBP_3 + " " + DBP_3 + " " + HR_3
+    do {
+        try BPStr.write(to: BPURL, atomically: true, encoding: String.Encoding.utf8)
+    } catch {
+        // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+    }
+}

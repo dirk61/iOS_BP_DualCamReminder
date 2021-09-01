@@ -31,7 +31,7 @@ class EventController{
                 }
             }
         }
-        sleep(1)
+        usleep(200 * 1000)
         print(self.isAdd)
         if (!self.isAdd)
         {

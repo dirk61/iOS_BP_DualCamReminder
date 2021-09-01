@@ -27,6 +27,7 @@
 		5B850FD92692E54600270DB8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B850FD82692E54600270DB8 /* ContentView.swift */; };
 		5B850FDB2692E56600270DB8 /* ExperimentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B850FDA2692E56600270DB8 /* ExperimentView.swift */; };
 		5BD807E526D634E600C08FF0 /* EventController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD807E426D634E600C08FF0 /* EventController.swift */; };
+		5BD807E726DDC1D600C08FF0 /* BP.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5BD807E626DDC1D500C08FF0 /* BP.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		5B850FD82692E54600270DB8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5B850FDA2692E56600270DB8 /* ExperimentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentView.swift; sourceTree = "<group>"; };
 		5BD807E426D634E600C08FF0 /* EventController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventController.swift; sourceTree = "<group>"; };
+		5BD807E626DDC1D500C08FF0 /* BP.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = BP.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 				5B201AB5269DA3E1005AB255 /* Upload.swift */,
 				579AEAF023D4A0C400FD5D4B /* CameraView.swift */,
 				579AEAF423D4A57700FD5D4B /* LayerController.swift */,
+				5BD807E626DDC1D500C08FF0 /* BP.jpg */,
 				579AEAE223D4A08100FD5D4B /* Assets.xcassets */,
 				579AEAEA23D4A08100FD5D4B /* Info.plist */,
 				579AEAE423D4A08100FD5D4B /* Preview Content */,
@@ -187,6 +190,7 @@
 				57FE8E0524B21AE800154285 /* test.PNG in Resources */,
 				579AEAE623D4A08100FD5D4B /* Preview Assets.xcassets in Resources */,
 				579AEAE323D4A08100FD5D4B /* Assets.xcassets in Resources */,
+				5BD807E726DDC1D600C08FF0 /* BP.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
